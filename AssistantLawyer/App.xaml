@@ -1,0 +1,19 @@
+<Application x:Class="AssistantLawyer.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:AssistantLawyer" StartupUri="Views\MainWindow.xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
+  <Application.Resources>
+        <Style x:Key = "GrowingButtonStyleNew" TargetType="Button">
+            <Setter Property = "Height" Value = "40"/>
+            <Style.Triggers>
+                <Trigger Property = "IsMouseOver" Value = "True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Name="str">
+                            <Storyboard TargetProperty = "Height">
+                                <DoubleAnimation From = "40" To = "100"
+                                                 Duration = "0:0:2" AutoReverse="True"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Application.Resources>
+</Application>

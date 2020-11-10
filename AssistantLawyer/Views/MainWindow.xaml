@@ -1,0 +1,122 @@
+﻿<Window x:Class="AssistantLawyer.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AssistantLawyer.ViewModels"
+        mc:Ignorable="d"
+        Title="Помощник адвоката" Height="450" Width="800"
+        Icon="..\Data\Images\icon.ico">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Close"
+                        Executed="CloseCommandHandler"
+                        CanExecute="CanExecuteHandler"/>
+    </Window.CommandBindings>
+    <Window.DataContext>
+        <local:MainWindowViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <Style TargetType="ListBox">
+            <Style.Setters>
+                <Setter Property="Control.FontFamily" Value="Times New Roman"/>
+            </Style.Setters>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="Foreground" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Style.Setters>
+                <Setter Property="TextBlock.TextAlignment" Value="Justify" />
+                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+        <Menu Background="LightGray">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Открыть" Command="{Binding OpenRegBookCommand}"/>
+                <MenuItem Header="Сохранить" Command="{Binding SaveFileBookCommand}"/>
+                <MenuItem Header="Печать книги регистрации договоров" Command="{Binding PrintFileBookCommand}"/>
+                <Separator/>
+                <MenuItem Header="Выход" Command="ApplicationCommands.Close"/>
+            </MenuItem>
+            <MenuItem Header="Информация">
+                <MenuItem Header="Категории дел" Command="{Binding CategoryCommand}"/>
+                <MenuItem Header="Клиенты" Command="{Binding ClientsCommand}"/>
+            </MenuItem>
+            <!--<MenuItem Header="Архив">
+                <MenuItem Header="Законченные дела"/>
+            </MenuItem>-->
+            <MenuItem Header="Справка">
+                <MenuItem Header="Лицензия" Command="{Binding LicenseCommand}"/>
+                <MenuItem Header="Об авторе" Command="{Binding AuthorCommand}"/>
+                <Separator/>
+                <MenuItem Header="О программе" Command="{Binding AboutCommand}"/>
+            </MenuItem>
+        </Menu>
+        <ToolBarTray Grid.Row="1" Height="25" IsEnabled="True" x:Name="ToolBar" Background="LightGray">
+            <ToolBar ToolBarTray.IsLocked="True" Height="25">
+                <Button ToolTip="Договоры">
+                    <Image Source="/Data/Images/contracts.jpg"/>
+                </Button>
+                <Separator />
+                <Button ToolTip="Клиенты" Command="{Binding ClientsCommand}">
+                    <Image Source="/Data/Images/customers.png"/>
+                </Button>
+                <Separator />
+                <Button ToolTip="Категории дел" Command="{Binding CategoryCommand}">
+                    <Image Source="/Data/Images/cases_category.jpg"/>
+                </Button>
+                <Separator />
+                <Button ToolTip="Архив дел">
+                    <Image Source="/Data/Images/zip.png"/>
+                </Button>
+                <Separator />
+                <Button ToolTip="Выход" Command="ApplicationCommands.Close">
+                    <Image Source="/Data/Images/exit.png"/>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <Button x:Name="addContract" 
+                        Command="{Binding AddContractCommand}"
+                        Style="{StaticResource GrowingButtonStyleNew}">Добавить договор</Button>
+                <Button x:Name="editContract" 
+                        Command="{Binding EditContractCommand}"
+                        Style="{StaticResource GrowingButtonStyleNew}">Редактировать договор</Button>
+                <Button x:Name="deleteContract" 
+                        Command="{Binding DeleteContractCommand}"
+                        Style="{StaticResource GrowingButtonStyleNew}">Удалить договор</Button>
+            </StackPanel>
+            <GridSplitter Grid.Column="0" Width="5"/>
+            <Border Grid.Column="1">
+                <DataGrid x:Name="dGrid" ItemsSource="{Binding RegistrationBook.Contracts}" 
+                          SelectedItem="{Binding SelectedContract}"
+                          AutoGenerateColumns="False" 
+                          CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Номер договора" Binding="{Binding ContractID}"/>
+                        <DataGridTextColumn Header="ФИО клиента" Binding="{Binding Client.Name}"/>
+                        <DataGridTextColumn Header="Дата заключения" Binding="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}"/>
+                        <DataGridTextColumn Header="Предмет договора" Binding="{Binding Subject}"/>
+                        <DataGridTextColumn Header="Примечание" Binding="{Binding Notes}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+        <TextBlock x:Name="StatusBar" Grid.Row="3" Background="LightGray" Padding="5, 0, 0, 0" />
+    </Grid>
+</Window>
